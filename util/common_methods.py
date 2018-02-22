@@ -1,0 +1,149 @@
+import time
+import os
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
+import selenium.webdriver.support.ui as ui
+from datetime import datetime
+from robot.libraries.BuiltIn import BuiltIn
+from ebay_Testsuite import TestSuite
+from robot.api import logger
+
+class BaseClass:
+
+    def __init__(self, driver='chrome'):
+        """
+        Initialize the selenium web driver.
+        :param driver: Pass Chrome or Firefox drivers
+        :return: Handle for the driver
+        """
+        if driver == 'chrome':
+            self.driver = webdriver.Chrome("C:\\Python27\\chromedriver_win32\\chromedriver.exe")
+
+        self.robot_env = BuiltIn()
+
+    def custom_element(self, element, element_name=''):
+        """
+        :param element:
+        :param element_name:
+        :return:
+        """
+        try:
+            
+            elem = ''
+            if 'css' == element_name:
+                elem = self.driver.find_element_by_css_selector(element)
+            elif 'multi_css' == element_name:
+                elem = self.driver.find_elements_by_css_selector(element)
+            elif 'xpath' == element_name:
+                elem = self.driver.find_element_by_xpath(element)
+            return elem
+
+        except Exception as e:
+            self.robot_env.log_to_console("Element not found :" +  str(e))
+            return None
+
+    def custom_driver_wait(self, element, timeout=10):
+        """
+        :param element: Web Element to be validated
+        :param timeout: Max time for the element to appear in the Webpage
+        :return: Object for the element
+        """
+        try:
+            elem = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located((By.XPATH, element)))
+            return elem
+
+        except Exception as e:
+            self.robot_env.log_to_console("Driver wait failed : " + str(elem), str(e))
+
+
+    def custom_driver_wait_click(self , element , timeout = 10):
+        try:
+
+            elem = WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable((By.XPATH, element)))
+            self.robot_env.log_to_console("TYPE ELEMENT" + str(elem))
+            return elem
+
+        except Exception as e:
+            self.robot_env.log_to_console("Driver wait failed: " + str(elem), str(e))
+
+    def custom_click(self, element, element_name=''):
+        """
+        :param self:
+        :param element:
+        :param element_name:
+        :return:
+        """
+
+        try:
+            if element:
+                element.click()
+            else:
+                self.robot_env.log_to_console("TYPE FAILED : " + str(element_name))
+                return False
+
+        except Exception as e:
+            self.robot_env.log_to_console("CUSTOM CLICK FAILED: " + str(element), str(e))
+
+    def custom_send_key(self, element, input_str):
+        """
+        :param self:
+        :param element:
+        :param input_str:
+        :return:
+        """
+        try:
+            if element:
+                element.send_keys(input_str)
+            else:
+                return False
+        except Exception as e:
+            self.robot_env.log_to_console("SEND KEY FAILED" + str(e))
+
+    def custom_element_getText(self, element):
+        """
+        :param element:
+        :return:
+        """
+
+        try:
+            if element:
+                element.text
+            else:
+                return False
+        except Exception as e:
+            self.robot_env.log_to_console("GET TEXT FAILED" + str(e))
+
+    def close_driver(self):
+        """
+        :return:
+        """
+        try:
+            self.driver.close()
+        except Exception as e:
+            self.robot_env.log_to_console("DRIVER EXCEPTION :" + str(e))
+
+
+    def is_displayed(self,element):
+        """
+        :param element:
+        :return:
+        """
+        try:
+            element.is_displayed()
+        except Exception as e:
+            self.robot_env.log_to_console("DISPLAY ERROR :" + str(e))
+
+    def get_screenshot(self, driver, screenname):
+        try:
+            self.foldername = os.getcwd()+"\\..\\..\\ScreenShots"
+            screenpath = os.path.join(self.foldername, screenname+".png")
+            self.driver.get_screenshot_as_file(screenpath)
+            self.robot_env.log_to_console("SCREENSHOT CAPTURED SUCCESSFULLY...")
+
+        except Exception as e:
+            self.robot_env.log_to_console("FAIL: SCREENSHOT PROCESS FAILURE DUE TO ISSUES WITH BROWSER...: " +str(e))
+            logger.info("FAIL: SCREENSHOT PROCESS FAILURE DUE TO ISSUES WITH BROWSER\n")

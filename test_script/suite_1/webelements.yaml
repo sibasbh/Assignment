@@ -1,0 +1,27 @@
+
+Home_Page:
+    search_br : '//*[@id="gh-ac"]'
+    results_kw : '//span[@class="kwcat" and contains(text(), "results")]'
+    inch_search  : "//div[@class='search-guidance__text-item-title search-guidance__text-item-title--two-lines' and contains (text() , '50')]"
+    nxt_btn : ".srp-carousel__next-btn"
+    itemimg : '.img.imgWr2'
+    itemtitle : '.lvtitle'
+
+
+Product_Detail_Page:
+    ebay_logo:  "//a[@id='gh-la']"
+    cond_value : '//div[@id="vi-itm-cond" and @itemprop = "itemCondition"]'
+    price_value : "//span[@id='prcIsum' and @itemprop = 'price']"
+    prod_name : "//*[@class='it-ttl' and @id = 'itemTitle']"
+    seller_information_value : '//a[@id="mbgLink"]'
+    add_cart : '//a[@id="isCartBtn_btn"]'
+    prot_plan : '//div[@class="adndesclbl outline addon-overlay-details-title" and contains(text(),"protection")]'
+    thank_btn : "//*[@class='addonbtn addonnothx addon-overlay-close-button' and contains(text(),'No Thanks')]"
+
+
+Checkout_Page:
+    ck_title : '//h1[@class="mb15 nowrap" and contains(text(), "Cart")]'
+    condition_value : "//*[@class='ItemInfoTable']/tbody/tr/td[2]"
+    Price_value_ckout : "//*[@class='fw-b']"
+    produce_name : "(//div[@class='ff-ds3 fs16 mb5 fw-n sci-itmttl'])[1]"
+    sellinfo : ".mbg-id"

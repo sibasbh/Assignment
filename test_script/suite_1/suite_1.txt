@@ -1,0 +1,21 @@
+*** Settings ***
+
+Variables         webelements.yaml
+Variables         testdata.yaml
+Library           ebay_shopping_001
+Library           check_out_page
+Library           home_page
+Library           product_detail_page
+Library           common_methods
+Library           Collections
+Library           OperatingSystem
+Library           testsuite
+
+***Test Cases***
+
+ebay_shopping_001
+    [Documentation]     Testcase to Search Item and Validate the Product details.
+    testcase001_initialize    PRODUCT_VALIDATION
+    testcase_setup
+    testcase_test
+    testcase_cleanup
