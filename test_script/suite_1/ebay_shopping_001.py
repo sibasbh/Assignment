@@ -16,6 +16,7 @@ from POM.product_detail_page import ProduceDetails
 from POM.check_out_page import ShoppingCart
 
 
+
 html_pass = '<b style="color:green">PASS</b>'
 html_fail = '<b style="color:red">FAIL</b>'
 
@@ -80,12 +81,13 @@ class PRODUCT_VALIDATION():
                 self.cartobj = ShoppingCart(self.chrome, self.objSuite)
                 self.chrome.driver.maximize_window()
                 self.chrome.driver.get(self.objSuite.url)
-                self.robot_env.log_to_console("1. CHROME BROWSER LAUNCHED AND URL ENTERED")
-                logger.info("\t <b><h3>CHROME BROWSER LAUNCHED AND URL ENTERED : %s </h3></b>" % html_pass, html=True)
-                self.chrome.get_screenshot(self.chrome.driver, "1_Landing Page_Success")
+                self.robot_env.log_to_console("Landing Page - Browser launched and URL Entered successfully")
+                logger.info("\t <b><h3>1.Landing Page - Browser launched and URL Entered successfully : %s </h3></b>" % html_pass, html=True)
         except Exception as e:
-            logger.info("\t <b><h3>FAILED TO LAUNCHED CHROME BROWSER AND ENTER URL : %s </h3></b>" % html_fail, html=True)
+            logger.info("\t <b><h3>Exception: FAILED TO LAUNCHED CHROME BROWSER AND ENTER URL : %s </h3></b>" % html_fail, html=True)
+            self.robot_env.log_to_console("Exception: FAILED TO LAUNCHED CHROME BROWSER AND ENTER URL", str(e))
             self.chrome.driver.close_driver()
+
 
 
     def test(self):
@@ -93,14 +95,20 @@ class PRODUCT_VALIDATION():
         Call all the functions created to perform ebay webpage automation.
         :return: NONE
         """
-        self.homeobj.product_search()
-        self.homeobj.choose_category()
-        self.homeobj.validate_select_product()
-        self.prod_details = self.prodobj.product_detail_page()
-        self.prodobj.validate_condition_parameter()
-        self.prodobj.protection_plan()
-        self.cartobj.shoppingcart_page_validation()
-        self.cartobj.product_detail_validation(self.prod_details)
+        try:
+            self.homeobj.product_search()
+            self.homeobj.choose_category()
+            self.homeobj.validate_select_product()
+            self.prod_details = self.prodobj.product_detail_page()
+            self.prodobj.validate_condition_parameter()
+            self.prodobj.protection_plan()
+            self.cartobj.shoppingcart_page_validation()
+            self.cartobj.product_detail_validation(self.prod_details)
+
+        except Exception as e:
+            self.robot_env.log_to_console("Exception : PRODUCT VALIDATION FAILED:" + str(e))
+            logger.info("\t <b><h3>Exception : Product Validation failed : %s </h3></b>" % html_fail, html=True)
+
 
     def cleanup(self):
         """

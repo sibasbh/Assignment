@@ -12,6 +12,8 @@ from robot.api import logger
 from util.common_methods import BaseClass
 from test_script.suite_1.testsuite import  TestSuite
 from product_detail_page import ProduceDetails
+from robot.utils.asserts import *
+
 
 html_pass = '<b style="color:green">PASS</b>'
 html_fail = '<b style="color:red">FAIL</b>'
@@ -24,6 +26,8 @@ class ShoppingCart:
         self.commonobj = commonobj
         self.objSuite = objSuite
 
+
+
     def shoppingcart_page_validation(self):
         """
         :Step 1 : From Shopping Cart page copy Condition , Price , Product name , Seller Info to a dictionary.
@@ -31,43 +35,38 @@ class ShoppingCart:
         :return: NONE
         """
         try:
-            title_elem = self.commonobj.custom_driver_wait(self.objSuite.ck_title)
-            cart = title_elem.text
+            title_name = self.commonobj.custom_driver_wait(self.objSuite.ck_title).text
+            assert "Your eBay Shopping Cart" in title_name
+            self.prod_detail1 = {}
+            key1 = "Condition"
+            key2 = "Price"
+            key3 = "Produce Name"
+            key4 = "Seller Information"
+            value1 = self.commonobj.custom_element(self.objSuite.condition_value, 'xpath').text
+            assert_not_none(value1, "Unable to capture Condition")
+            price_elem = self.commonobj.custom_element(self.objSuite.Price_value_checkout, 'xpath')
+            value2 = str(price_elem.text).replace('US ', '')
+            assert_not_none(value2, "Unable to capture the Price")
+            value3 = self.commonobj.custom_element(self.objSuite.produce_name, 'xpath').text
+            assert_not_none(value3, "Unable to capture the Product Name")
+            value4 = self.commonobj.custom_element(self.objSuite.sellinfo, 'css').text
+            assert_not_none(value4, "Unable to capture the Product Name")
 
-            if 'Your eBay Shopping Cart' in cart:
-                self.prod_detail1 = {}
-                key1 = "Condition"
-                key2 = "Price"
-                key3 = "Produce Name"
-                key4 = "Seller Information"
+            self.prod_detail1[key1] = value1
+            self.prod_detail1[key2] = value2
+            self.prod_detail1[key3] = value3
+            self.prod_detail1[key4] = value4
 
-                cond_elem = self.commonobj.custom_element(self.objSuite.condition_value, 'xpath')
-                value1 = cond_elem.text
+            logger.info("\t <b><h3>Shopping Cart - Captured Product Informations : %s </h2></b>" % html_pass, html=True)
+            self.robot_env.log_to_console("Shopping Cart - Captured Product Informations")
 
-                price_elem = self.commonobj.custom_element(self.objSuite.Price_value_checkout, 'xpath')
-                value2 = str(price_elem.text).replace('US ', '')
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Shopping Cart - Error occured during product detail capture" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Shopping Cart - Error occured during product detail capture : %s </h3></b>" % html_fail, html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "ShoppingCart_Failure")
 
-                prod_elem = self.commonobj.custom_element(self.objSuite.produce_name, 'xpath')
-                value3 = prod_elem.text
 
-                sell_elem = self.commonobj.custom_element(self.objSuite.sellinfo, 'css')
-                value4 = sell_elem.text
 
-                self.prod_detail1[key1] = value1
-                self.prod_detail1[key2] = value2
-                self.prod_detail1[key3] = value3
-                self.prod_detail1[key4] = value4
-
-                logger.info("\t <b><h3>PRODUCT DETAILS CAPTURED FROM SHOPPING CART PAGE : %s </h2></b>" % html_pass, html=True)
-                self.robot_env.log_to_console("9. PRODUCT DETAILS CAPTURED FROM SHOPPING CART PAGE")
-                self.commonobj.get_screenshot(self.commonobj.driver, "8_CartValidation_Success")
-
-        except Exception as e:
-            self.robot_env.log_to_console("9. PRODUCT DETAILS NOT CAPTURED FROM SHOPPING CART PAGE" , str(e))
-            logger.info("\t <b><h3>PRODUCT DETAILS NOT CAPTURED FROM SHOPPING CART PAGE : %s </h2></b>" % html_fail,
-                        html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "8_CartValidation_Failed")
-            self.commonobj.close_driver()
 
 
     def product_detail_validation(self, prod_detail):
@@ -87,17 +86,11 @@ class ShoppingCart:
                         else:
                             flag = flag
                         break
-            if flag == 4:
-                self.robot_env.log_to_console("10. ALL PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART MATCHES")
-                logger.info("\t <b><h3>ALL PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART MATCHES : %s </h2></b>" % html_pass,
-                            html=True)
-            else:
-                self.robot_env.log_to_console("10. ALL PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART DOES NOT MATCHES")
-                logger.info("\t <b><h3> PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART DOES NOT MATCH : %s </h2></b>" % html_fail,
-                            html=True)
+            assert flag ==3,"Check if all parameters from Product Detail page matched Shopping Cart Page"
+            self.robot_env.log_to_console("Shopping Cart - All Parameters from Product Details page and Shopping Cart Page matched")
+            logger.info("\t <b><h3>Shopping Cart - All Parameters from Product Details page and Shopping Cart Page should match : %s </h2></b>" % html_pass,html=True)
 
-        except Exception as e:
-            self.robot_env.log_to_console("10. ALL PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART DOES NOT MATCHES" ,str(e))
-            logger.info("\t <b><h3>PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART DOES NOT MATCH : %s </h2></b>" % html_fail,
-                        html=True)
-            self.commonobj.close_driver()
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Parameters from Product Detail page does not match Shopping Cart Page" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Error occured during product detail capture from Shopping Cart : %s </h3></b>" % html_fail,html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "ShoppingCart_Validation_Failure")

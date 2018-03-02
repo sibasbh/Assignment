@@ -11,6 +11,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 from util.common_methods import BaseClass
 from test_script.suite_1.testsuite import  TestSuite
+from robot.utils.asserts import *
 
 html_pass = '<b style="color:green">PASS</b>'
 html_fail = '<b style="color:red">FAIL</b>'
@@ -31,19 +32,18 @@ class HomePage:
         try:
             search_elem = self.commonobj.custom_driver_wait(self.objSuite.search_br)
             self.commonobj.custom_click(search_elem,"SEARCH BAR")
-            self.robot_env.log_to_console('2. SEARCH BAR LOCATED SUCCESSFULLY')
+            self.robot_env.log_to_console('SEARCH BAR LOCATED SUCCESSFULLY')
             elem = self.commonobj.custom_element(self.objSuite.search_br , 'xpath')
-            self.commonobj.custom_send_key(elem , self.objSuite.input_item)
+            flag = self.commonobj.custom_send_key(elem , self.objSuite.input_item)
+            assert_true(flag, "Validate if Search is successful")
             elem.send_keys(Keys.RETURN)
-            self.robot_env.log_to_console('3. PRODUCT SEARCH SUCCESSFULLY')
-            logger.info("\t <b><h3>PRODUCT SEARCH SUCCESSFULLY : %s </h3></b>" % html_pass, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "2_Product Searched_Success")
+            self.robot_env.log_to_console('Product search is successful')
+            logger.info("\t <b><h3>Landing Page - Product search is successful : %s </h3></b>" % html_pass, html=True)
 
-        except Exception as e:
-            self.robot_env.log_to_console("FAILED DURING CATEGORY SELECTION :" + str(e))
-            logger.info("\t <b><h3>FAILED DURING CATEGORY SELECTION : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "2_Product Search_failed")
-            self.commonobj.close_driver()
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Landing Page - Error during product Search" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Landing Page - Error during product Search : %s </h3></b>" % html_fail, html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")
 
 
 
@@ -59,20 +59,18 @@ class HomePage:
             while (flag == 0):
                 if button_elem.is_displayed():
                     self.commonobj.custom_click(button_elem, "INCH BUTTON SELECTION")
-                    self.robot_env.log_to_console('4. IDENTIFIED 50-60" BUTTON')
-                    logger.info("\t <b><h3> IDENTIFIED 50-60 BUTTON : %s </h3></b>" % html_pass, html=True)
                     flag = 1
                 else:
                     elem = self.commonobj.custom_element(self.objSuite.search_br , "xpath")
                     self.commonobj.custom_click(elem, "NEXT BUTTON")
-            self.commonobj.get_screenshot(self.commonobj.driver, "3_InchSelection_Success")
 
-        except Exception as e:
-            self.robot_env.log_to_console("FAILED DURING CATEGORY SELECTION :" + str(e))
-            logger.info("\t <b><h3> FAILED TO IDENTIFY 50-60 BUTTON : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "3_InchSelection_Failed")
-            self.commonobj.close_driver()
+            assert flag==1 , "Identified 50-60 Inch Button"
+            logger.info("\t <b><h3>Landing Page - Identified 50-60 Inch Button : %s </h3></b>" % html_pass,html=True)
 
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Landing Page - Unable to identify 50-60 Inch Button" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Landing Page - Unable to identify 50-60 Inch Button : %s </h3></b>" % html_fail, html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "50-60In_Capture_Failed")
 
 
 
@@ -86,19 +84,15 @@ class HomePage:
             result_elem = self.commonobj.custom_driver_wait(self.objSuite.result_kw)
             if result_elem:
                 itemlist = self.commonobj.custom_element(self.objSuite.itemtitle , element_name="multi_css")
-                if 'sony' in itemlist[0].text.lower():
-                    if 'tv' in itemlist[0].text.lower():
-                        self.robot_env.log_to_console("5. PRODUCT WITH 'SONY' 'TV' LOCATED SUCCESSFULLY")
-                        logger.info("\t <b><h3> PRODUCT WITH 'SONY' 'TV' LOCATED SUCCESSFULLY: %s </h3></b>" % html_pass, html=True)
-                        prod_image = self.commonobj.custom_element(self.objSuite.itemimg, element_name="multi_css")
-                        prod_image[0].click()
-                else:
-                    logger.info("\t <b><h3> FAILED TO IDENTIFY PRODUCT WITH 'SONY' 'TV' : %s </h3></b>" % html_fail, html=True)
-                    self.robot_env.log_to_console("5. PRODUCT WITH 'SONY' 'TV' WAS NOT LOCATED")
-                    self.commonobj.get_screenshot(self.commonobj.driver, "Product List")
-                self.commonobj.get_screenshot(self.commonobj.driver, "4_Product_Selection_Success")
-        except Exception as e:
-            self.robot_env.log_to_console("5. PRODUCT WITH 'SONY' 'TV' WAS NOT LOCATED" + str(e))
-            logger.info("\t <b><h3> FAILED TO IDENTIFY PRODUCT WITH 'SONY' 'TV' : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "4_Product_Selection_Failed")
-            self.commonobj.close_driver()
+                assert 'sony' in itemlist[1].text.lower()
+                assert 'tv' in itemlist[1].text.lower()
+                if 'sony' and 'tv' in itemlist[1].text.lower():
+                    self.robot_env.log_to_console("Landing Page - Second product in List contain word 'sony' and 'tv'")
+                    logger.info("\t <b><h3> Landing Page - Second product in List contain word 'sony' and 'tv' : %s </h3></b>" % html_pass, html=True)
+                    prod_image = self.commonobj.custom_element(self.objSuite.itemimg, element_name="multi_css")
+                    prod_image[1].click()
+
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv'" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv' : %s </h3></b>" % html_fail, html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")

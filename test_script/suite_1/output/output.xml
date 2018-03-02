@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generated="20180222 23:35:53.241" generator="Robot 3.0.2 (Python 2.7.13 on win32)">
+<robot generated="20180302 10:37:45.258" generator="Robot 3.0.2 (Python 2.7.13 on win32)">
 <suite source="D:\T-Mobile\WRG\ebayshopping\test_script\suite_1\suite_1.txt" id="s1" name="Suite 1">
 <test id="s1-t1" name="ebay_shopping_001">
 <kw name="Testcase001 Initialize" library="ebay_shopping_001">
@@ -7,31 +7,33 @@
 <arguments>
 <arg>PRODUCT_VALIDATION</arg>
 </arguments>
-<status status="PASS" endtime="20180222 23:35:53.663" starttime="20180222 23:35:53.663"></status>
+<status status="PASS" endtime="20180302 10:37:45.767" starttime="20180302 10:37:45.761"></status>
 </kw>
 <kw name="Testcase Setup" library="ebay_shopping_001">
 <doc>Call Setup method to initialise Chrome Driver.</doc>
-<msg timestamp="20180222 23:36:00.128" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;CHROME BROWSER LAUNCHED AND URL ENTERED : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
-<status status="PASS" endtime="20180222 23:36:00.723" starttime="20180222 23:35:53.663"></status>
+<msg timestamp="20180302 10:37:52.127" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;1.Landing Page - Browser launched and URL Entered successfully : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<status status="PASS" endtime="20180302 10:37:52.127" starttime="20180302 10:37:45.768"></status>
 </kw>
 <kw name="Testcase Test" library="ebay_shopping_001">
 <doc>Call test method to start the Script execution.</doc>
-<msg timestamp="20180222 23:36:04.335" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;PRODUCT SEARCH SUCCESSFULLY : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
-<msg timestamp="20180222 23:36:07.060" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; IDENTIFIED 50-60 BUTTON : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
-<msg timestamp="20180222 23:36:07.959" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; PRODUCT WITH 'SONY' 'TV' LOCATED SUCCESSFULLY: &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
-<msg timestamp="20180222 23:36:13.030" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; PROD DETAIL PAGE - CAPTURED PRODUCT INFORMATION : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
-<msg timestamp="20180222 23:36:18.458" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;PRODUCT DETAILS CAPTURED FROM SHOPPING CART PAGE : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h2&gt;&lt;/b&gt;</msg>
-<msg timestamp="20180222 23:36:18.767" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;ALL PARAMETERS FROM PRODUCT DETAIL AND SHOPPING CART MATCHES : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h2&gt;&lt;/b&gt;</msg>
-<status status="PASS" endtime="20180222 23:36:18.767" starttime="20180222 23:36:00.724"></status>
+<msg timestamp="20180302 10:37:55.394" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;Landing Page - Product search is successful : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:37:59.632" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;Landing Page - Identified 50-60 Inch Button : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:37:59.763" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; Landing Page - Second product in List contain word 'sony' and 'tv' : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:38:02.971" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; Product Detail Page - Captured all Product Informations : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:38:02.971" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt; Product Detail Page - 'Condition' should not be empty : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:38:06.882" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;Assersion Error : Protection Plan - Page Not displayed : &lt;b style="color:red"&gt;FAIL&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:38:07.134" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;Shopping Cart - Captured Product Informations : &lt;b style="color:green"&gt;PASS&lt;/b&gt; &lt;/h2&gt;&lt;/b&gt;</msg>
+<msg timestamp="20180302 10:38:07.134" html="yes" level="INFO">	 &lt;b&gt;&lt;h3&gt;Assersion Error : Error occured during product detail capture from Shopping Cart : &lt;b style="color:red"&gt;FAIL&lt;/b&gt; &lt;/h3&gt;&lt;/b&gt;</msg>
+<status status="PASS" endtime="20180302 10:38:07.498" starttime="20180302 10:37:52.128"></status>
 </kw>
 <kw name="Testcase Cleanup" library="ebay_shopping_001">
 <doc>Close chrome driver</doc>
-<status status="PASS" endtime="20180222 23:36:20.968" starttime="20180222 23:36:18.767"></status>
+<status status="PASS" endtime="20180302 10:38:07.948" starttime="20180302 10:38:07.498"></status>
 </kw>
 <doc>Testcase to Search Item and Validate the Product details.</doc>
-<status status="PASS" endtime="20180222 23:36:20.968" critical="yes" starttime="20180222 23:35:53.663"></status>
+<status status="PASS" endtime="20180302 10:38:07.949" critical="yes" starttime="20180302 10:37:45.760"></status>
 </test>
-<status status="PASS" endtime="20180222 23:36:20.968" starttime="20180222 23:35:53.257"></status>
+<status status="PASS" endtime="20180302 10:38:07.950" starttime="20180302 10:37:45.269"></status>
 </suite>
 <statistics>
 <total>
@@ -45,10 +47,6 @@
 </suite>
 </statistics>
 <errors>
-<msg timestamp="20180222 23:35:53.632" level="WARN">Imported library 'check_out_page' contains no keywords.</msg>
-<msg timestamp="20180222 23:35:53.632" level="WARN">Imported library 'home_page' contains no keywords.</msg>
-<msg timestamp="20180222 23:35:53.632" level="WARN">Imported library 'product_detail_page' contains no keywords.</msg>
-<msg timestamp="20180222 23:35:53.632" level="WARN">Imported library 'common_methods' contains no keywords.</msg>
-<msg timestamp="20180222 23:35:53.663" level="WARN">Imported library 'testsuite' contains no keywords.</msg>
+<msg timestamp="20180302 10:37:45.759" level="WARN">Imported library 'testsuite' contains no keywords.</msg>
 </errors>
 </robot>

@@ -11,19 +11,30 @@ from datetime import datetime
 from robot.libraries.BuiltIn import BuiltIn
 from ebay_Testsuite import TestSuite
 from robot.api import logger
+from robot.utils.asserts import *
 
-class BaseClass:
+html_pass = '<b style="color:green">PASS</b>'
+html_fail = '<b style="color:red">FAIL</b>'
 
-    def __init__(self, driver='chrome'):
+class BaseClass():
+
+    def __init__(self, driver):
         """
         Initialize the selenium web driver.
         :param driver: Pass Chrome or Firefox drivers
         :return: Handle for the driver
         """
-        if driver == 'chrome':
+        try:
+            self.robot_env = BuiltIn()
+            assert 'chrome' in driver
             self.driver = webdriver.Chrome("C:\\Python27\\chromedriver_win32\\chromedriver.exe")
+            assert 'chrome' in str(self.driver)
 
-        self.robot_env = BuiltIn()
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Error loading Chrome Browser" , str(error))
+            logger.info("\t <b><h3>Assersion Error : ERROR LOADING BROWSER : %s </h3></b>" % html_fail, html=True)
+
+
 
     def custom_element(self, element, element_name=''):
         """
@@ -32,7 +43,6 @@ class BaseClass:
         :return:
         """
         try:
-            
             elem = ''
             if 'css' == element_name:
                 elem = self.driver.find_element_by_css_selector(element)
@@ -40,11 +50,12 @@ class BaseClass:
                 elem = self.driver.find_elements_by_css_selector(element)
             elif 'xpath' == element_name:
                 elem = self.driver.find_element_by_xpath(element)
+            else:
+                return elem
             return elem
-
         except Exception as e:
             self.robot_env.log_to_console("Element not found :" +  str(e))
-            return None
+            return False
 
     def custom_driver_wait(self, element, timeout=10):
         """
@@ -58,7 +69,6 @@ class BaseClass:
 
         except Exception as e:
             self.robot_env.log_to_console("Driver wait failed : " + str(elem), str(e))
-
 
     def custom_driver_wait_click(self , element , timeout = 10):
         try:
@@ -98,6 +108,7 @@ class BaseClass:
         try:
             if element:
                 element.send_keys(input_str)
+                return True
             else:
                 return False
         except Exception as e:
@@ -125,7 +136,6 @@ class BaseClass:
             self.driver.close()
         except Exception as e:
             self.robot_env.log_to_console("DRIVER EXCEPTION :" + str(e))
-
 
     def is_displayed(self,element):
         """

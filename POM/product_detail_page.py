@@ -13,6 +13,7 @@ from robot.api import logger
 from util.common_methods import BaseClass
 from robot.libraries.BuiltIn import BuiltIn
 from test_script.suite_1.testsuite import  TestSuite
+from robot.utils.asserts import *
 
 
 html_pass = '<b style="color:green">PASS</b>'
@@ -33,40 +34,36 @@ class ProduceDetails:
         """
         try:
             search_elem = self.commonobj.custom_driver_wait(self.objSuite.ebay_logo)
-            if search_elem.is_displayed():
-                self.prod_detail = {}
-                key1 = "Condition"
-                key2 = "Price"
-                key3 = "Produce Name"
-                key4 = "Seller Information"
+            assert_not_none(search_elem, "Check if ebay logo is displayed in product detail page")
+            self.prod_detail = {}
+            key1 = "Condition"
+            key2 = "Price"
+            key3 = "Produce Name"
+            key4 = "Seller Information"
+            value_1 = (self.commonobj.custom_element(self.objSuite.cond_value, 'xpath')).text
+            assert_not_none(value_1, "Unable to capture Condition")
+            price_elem = self.commonobj.custom_element(self.objSuite.price_value, 'xpath')
+            value_2 = str(price_elem.text).replace('US ','')
+            assert_not_none(value_2, "Unable to capture the Price")
+            value_3 = self.commonobj.custom_element(self.objSuite.prod_name, 'xpath').text
+            assert_not_none(value_3, "Unable to capture the Product Name")
+            value_4 = self.commonobj.custom_element(self.objSuite.seller_information_value, 'xpath').text
+            assert_not_none(value_4, "Unable to capture the Product Name")
 
-                cond_elem = self.commonobj.custom_element(self.objSuite.cond_value, 'xpath')
-                value_1 = cond_elem.text
+            self.prod_detail[key1] = value_1
+            self.prod_detail[key2] = value_2
+            self.prod_detail[key3] = value_3
+            self.prod_detail[key4] = value_4
 
-                price_elem = self.commonobj.custom_element(self.objSuite.price_value, 'xpath')
-                value_2 = str(price_elem.text).replace('US ','')
+            self.robot_env.log_to_console("Product Detail Page - Captured Product Informations")
+            logger.info("\t <b><h3> Product Detail Page - Captured all Product Informations : %s </h3></b>" % html_pass,html=True)
+            assert_not_none(self.prod_detail, "Dictionary not created for captured products")
+            return self.prod_detail
 
-                prod_elem = self.commonobj.custom_element(self.objSuite.prod_name, 'xpath')
-                value_3 = prod_elem.text
-
-                sell_elem = self.commonobj.custom_element(self.objSuite.seller_information_value, 'xpath')
-                value_4 = sell_elem.text
-
-                self.prod_detail[key1] = value_1
-                self.prod_detail[key2] = value_2
-                self.prod_detail[key3] = value_3
-                self.prod_detail[key4] = value_4
-
-                self.robot_env.log_to_console("6. PROD DETAIL PAGE - CAPTURED PRODUCT INFORMATION")
-                logger.info("\t <b><h3> PROD DETAIL PAGE - CAPTURED PRODUCT INFORMATION : %s </h3></b>" % html_pass,html=True)
-                self.commonobj.get_screenshot(self.commonobj.driver, "5_Product_Detail_validation_Success")
-                return self.prod_detail
-
-        except Exception as e:
-            self.robot_env.log_to_console("6. PROD DETAIL PAGE - CAPTURED PRODUCT INFORMATION FAILED :" , str(e))
-            logger.info("\t <b><h3> PROD DETAIL PAGE - FAILED TO CAPTURED PRODUCT INFORMATION : %s </h3></b>" % html_fail,html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "5_Product_Detail_validation_Failed")
-            self.commonobj.close_driver()
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error: Product Detail Page - Error while Capturing Product Informations" + str(error))
+            logger.info("\t <b><h3>Assersion Error: Product Detail Page - Error while Capturing Product Informations : %s </h3></b>" % html_fail, html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Detail_Page_Failure")
 
 
     def validate_condition_parameter(self):
@@ -76,25 +73,23 @@ class ProduceDetails:
         :return: NONE
         """
         try:
+            # import sys, pdb;
+            # pdb.Pdb(stdout=sys.__stdout__).set_trace()
+
             for key, value in self.prod_detail.items():
                 if key == 'Condition':
-                    if value is None or value == '':
-                        logger.info(
-                            "\t <b><h3> PROD DETAIL PAGE- CONDITION IS EMPTY : %s </h3></b>" % html_fail,html=True)
-                        self.robot_env.log_to_console("7. CONDITION IS EMPTY")
-                    else:
-                        logger.info("\t <b><h3> PROD DETAIL PAGE- CONDITION IS NOT EMPTY : %s </h2></b>" % html_pass, html=True )
-                break
+                    assert_not_equal(None,value,"Condition should not be None")
+                    assert_not_equal('', value, "Condition should not be None")
+                    logger.info("\t <b><h3> Product Detail Page - 'Condition' should not be empty : %s </h3></b>" % html_pass,html=True)
+                    self.robot_env.log_to_console("Product Detail Page - 'Condition' should not be empty")
+                    break
             cart_elem = self.commonobj.custom_element(self.objSuite.add_cart, 'xpath')
             cart_elem.click()
-            self.commonobj.get_screenshot(self.commonobj.driver, "6_AddToCart_Launch_Success")
-        except Exception as e:
-            self.robot_env.log_to_console("7. CONDITION IS EMPTY" , str(e))
-            self.commonobj.get_screenshot(self.commonobj.driver, "6_AddToCart_Launch_Failed")
-            logger.info("\t <b><h3> PROD DETAIL PAGE- CONDITION IS EMPTY : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.close_driver()
 
-
+        except AssertionError as error:
+            self.robot_env.log_to_console( "Assersion Error : Product Detail Page - Condition is Empty" + str(error))
+            logger.info("\t <b><h3>Assersion Error : Product Detail Page - Condition is Empty : %s </h3></b>" % html_fail,html=True)
+            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Detail_Page_Condition_Failure")
 
 
     def protection_plan(self):
@@ -104,17 +99,11 @@ class ProduceDetails:
         :return: NONE
         """
         try:
-            if (self.commonobj.custom_element(self.objSuite.prot_plan, 'xpath') != None):
-                thank_elem = self.commonobj.custom_element(self.objSuite.thank_btn, 'xpath')
-                self.commonobj.custom_click(thank_elem, "No Thanks")
-                self.commonobj.get_screenshot(self.commonobj.driver, "7_Protection Plan")
-                self.robot_env.log_to_console("8. PROTECTION PLAN PAGE IS HANDLED")
-                logger.info("\t <b><h3> PROTECTION PLAN PAGE IS HANDLED : %s </h3></b>" % html_pass, html=True)
-                self.commonobj.get_screenshot(self.commonobj.driver, "7_ProductDetailPage_Success")
-            else:
-                self.robot_env.log_to_console("8. PROTECTION PLAN PAGE IS SKIPPED")
-                pass
-        except Exception as e:
-            self.robot_env.log_to_console("8 . PROTECTION PLAN NOT HANDLED PROPERLY : ", str(e))
-            self.commonobj.get_screenshot(self.commonobj.driver, "7_ProductDetailPage_Failed")
-            self.commonobj.close_driver()
+            prot_elem = self.commonobj.custom_element(self.objSuite.prot_plan, 'xpath')
+            assert_none(prot_elem,"Continue only if Protection Plan Page is displayed")
+            thank_elem = self.commonobj.custom_element(self.objSuite.thank_btn, 'xpath')
+            self.commonobj.custom_click(thank_elem, "No Thanks")
+
+        except AssertionError as error:
+            self.robot_env.log_to_console( "Assersion Error : Protection Plan - Page Not displayed : " + str(error))
+            logger.info("\t <b><h3>Assersion Error : Protection Plan - Page Not displayed : %s </h3></b>" % html_fail,html=True)
