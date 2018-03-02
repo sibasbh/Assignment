@@ -26,6 +26,8 @@ class ShoppingCart:
         self.commonobj = commonobj
         self.objSuite = objSuite
 
+
+
     def shoppingcart_page_validation(self):
         """
         :Step 1 : From Shopping Cart page copy Condition , Price , Product name , Seller Info to a dictionary.
@@ -62,7 +64,9 @@ class ShoppingCart:
             self.robot_env.log_to_console("Assersion Error : Shopping Cart - Error occured during product detail capture" + str(error))
             logger.info("\t <b><h3>Assersion Error : Shopping Cart - Error occured during product detail capture : %s </h3></b>" % html_fail, html=True)
             self.commonobj.get_screenshot(self.commonobj.driver, "ShoppingCart_Failure")
-            raise Exception("Exception shoppingcart page validation")
+
+
+
 
 
     def product_detail_validation(self, prod_detail):
@@ -82,7 +86,7 @@ class ShoppingCart:
                         else:
                             flag = flag
                         break
-            assert flag ==4,"Check if all parameters from Product Detail page matched Shopping Cart Page"
+            assert flag ==3,"Check if all parameters from Product Detail page matched Shopping Cart Page"
             self.robot_env.log_to_console("Shopping Cart - All Parameters from Product Details page and Shopping Cart Page matched")
             logger.info("\t <b><h3>Shopping Cart - All Parameters from Product Details page and Shopping Cart Page should match : %s </h2></b>" % html_pass,html=True)
 
@@ -90,4 +94,3 @@ class ShoppingCart:
             self.robot_env.log_to_console("Assersion Error : Parameters from Product Detail page does not match Shopping Cart Page" + str(error))
             logger.info("\t <b><h3>Assersion Error : Error occured during product detail capture from Shopping Cart : %s </h3></b>" % html_fail,html=True)
             self.commonobj.get_screenshot(self.commonobj.driver, "ShoppingCart_Validation_Failure")
-            raise Exception("Exception product detail validation")

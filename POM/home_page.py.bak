@@ -44,7 +44,8 @@ class HomePage:
             self.robot_env.log_to_console("Assersion Error : Landing Page - Error during product Search" + str(error))
             logger.info("\t <b><h3>Assersion Error : Landing Page - Error during product Search : %s </h3></b>" % html_fail, html=True)
             self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")
-            raise Exception("Exception product_search")
+
+
 
     def choose_category(self):
         """
@@ -70,11 +71,12 @@ class HomePage:
             self.robot_env.log_to_console("Assersion Error : Landing Page - Unable to identify 50-60 Inch Button" + str(error))
             logger.info("\t <b><h3>Assersion Error : Landing Page - Unable to identify 50-60 Inch Button : %s </h3></b>" % html_fail, html=True)
             self.commonobj.get_screenshot(self.commonobj.driver, "50-60In_Capture_Failed")
-            raise Exception("Exception choose category")
+
+
 
     def validate_select_product(self):
         """
-        :Step 1 : Check if the Second Product in the List has key word "Sony" and "Tv" .
+        :Step 1 : Check if the First Product in the List has key word "Sony" and "Tv" .
         :Step 2 : If the Item satisfies Condition 1 Click to Image of the Item.
         :return:
         """
@@ -94,4 +96,3 @@ class HomePage:
             self.robot_env.log_to_console("Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv'" + str(error))
             logger.info("\t <b><h3>Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv' : %s </h3></b>" % html_fail, html=True)
             self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")
-            raise Exception("Exception validate select product")

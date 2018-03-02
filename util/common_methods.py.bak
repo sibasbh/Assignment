@@ -35,6 +35,7 @@ class BaseClass():
             logger.info("\t <b><h3>Assersion Error : ERROR LOADING BROWSER : %s </h3></b>" % html_fail, html=True)
 
 
+
     def custom_element(self, element, element_name=''):
         """
         :param element:

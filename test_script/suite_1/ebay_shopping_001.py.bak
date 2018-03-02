@@ -16,6 +16,7 @@ from POM.product_detail_page import ProduceDetails
 from POM.check_out_page import ShoppingCart
 
 
+
 html_pass = '<b style="color:green">PASS</b>'
 html_fail = '<b style="color:red">FAIL</b>'
 
@@ -53,6 +54,7 @@ class ebay_shopping_001(object):
         """
         self.tc.cleanup()
 
+
 class PRODUCT_VALIDATION():
     def __init__(self, testid):
         self.testid = testid
@@ -84,7 +86,9 @@ class PRODUCT_VALIDATION():
         except Exception as e:
             logger.info("\t <b><h3>Exception: FAILED TO LAUNCHED CHROME BROWSER AND ENTER URL : %s </h3></b>" % html_fail, html=True)
             self.robot_env.log_to_console("Exception: FAILED TO LAUNCHED CHROME BROWSER AND ENTER URL", str(e))
-            self.chrome.close_driver()
+            self.chrome.driver.close_driver()
+
+
 
     def test(self):
         """
@@ -104,7 +108,7 @@ class PRODUCT_VALIDATION():
         except Exception as e:
             self.robot_env.log_to_console("Exception : PRODUCT VALIDATION FAILED:" + str(e))
             logger.info("\t <b><h3>Exception : Product Validation failed : %s </h3></b>" % html_fail, html=True)
-            raise Exception("Exception Product validation")
+
 
     def cleanup(self):
         """
