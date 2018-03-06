@@ -29,22 +29,18 @@ class HomePage:
         :Step 3: Click on search.
         :return: NONE
         """
-        try:
-            search_elem = self.commonobj.custom_driver_wait(self.objSuite.search_br)
-            self.commonobj.custom_click(search_elem,"SEARCH BAR")
-            self.robot_env.log_to_console('SEARCH BAR LOCATED SUCCESSFULLY')
-            elem = self.commonobj.custom_element(self.objSuite.search_br , 'xpath')
-            flag = self.commonobj.custom_send_key(elem , self.objSuite.input_item)
-            assert_true(flag, "Validate if Search is successful")
+        search_elem = self.commonobj.custom_driver_wait(self.objSuite.search_br)
+        self.commonobj.custom_click(search_elem,"SEARCH BAR")
+        self.robot_env.log_to_console('SEARCH BAR LOCATED SUCCESSFULLY')
+        elem = self.commonobj.custom_element(self.objSuite.search_br , 'xpath')
+        flag = self.commonobj.custom_send_key(elem , self.objSuite.input_item)
+        # assert_true(flag, "Validate if Search is successful")
+        if flag == True:
             elem.send_keys(Keys.RETURN)
             self.robot_env.log_to_console('Product search is successful')
-            logger.info("\t <b><h3>Landing Page - Product search is successful : %s </h3></b>" % html_pass, html=True)
-
-        except AssertionError as error:
-            self.robot_env.log_to_console("Assersion Error : Landing Page - Error during product Search" + str(error))
-            logger.info("\t <b><h3>Assersion Error : Landing Page - Error during product Search : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")
-            raise Exception("Exception product_search")
+            return True
+        else:
+            return False
 
     def choose_category(self):
         """
@@ -52,25 +48,21 @@ class HomePage:
         :Step 2: If Button 50" - 60" is not visible select Next Button and look for the button and click.
         :return: NONE
         """
-        try:
-            flag = 0
-            button_elem = self.commonobj.custom_element(self.objSuite.inch_search , "xpath")
-            while (flag == 0):
-                if button_elem.is_displayed():
-                    self.commonobj.custom_click(button_elem, "INCH BUTTON SELECTION")
-                    flag = 1
-                else:
-                    elem = self.commonobj.custom_element(self.objSuite.search_br , "xpath")
-                    self.commonobj.custom_click(elem, "NEXT BUTTON")
-
-            assert flag==1 , "Identified 50-60 Inch Button"
-            logger.info("\t <b><h3>Landing Page - Identified 50-60 Inch Button : %s </h3></b>" % html_pass,html=True)
-
-        except AssertionError as error:
-            self.robot_env.log_to_console("Assersion Error : Landing Page - Unable to identify 50-60 Inch Button" + str(error))
-            logger.info("\t <b><h3>Assersion Error : Landing Page - Unable to identify 50-60 Inch Button : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "50-60In_Capture_Failed")
-            raise Exception("Exception choose category")
+        flag = 0
+        button_elem = self.commonobj.custom_element(self.objSuite.inch_search , "xpath")
+        while (flag == 0):
+            if button_elem.is_displayed():
+                self.commonobj.custom_click(button_elem, "INCH BUTTON SELECTION")
+                flag = 1
+            else:
+                elem = self.commonobj.custom_element(self.objSuite.search_br , "xpath")
+                self.commonobj.custom_click(elem, "NEXT BUTTON")
+        #
+        # assert flag==1 , "Identified 50-60 Inch Button"
+        if flag ==1:
+            return True
+        else:
+            return False
 
     def validate_select_product(self):
         """
@@ -78,20 +70,15 @@ class HomePage:
         :Step 2 : If the Item satisfies Condition 1 Click to Image of the Item.
         :return:
         """
-        try:
-            result_elem = self.commonobj.custom_driver_wait(self.objSuite.result_kw)
-            if result_elem:
-                itemlist = self.commonobj.custom_element(self.objSuite.itemtitle , element_name="multi_css")
-                assert 'sony' in itemlist[1].text.lower()
-                assert 'tv' in itemlist[1].text.lower()
-                if 'sony' and 'tv' in itemlist[1].text.lower():
-                    self.robot_env.log_to_console("Landing Page - Second product in List contain word 'sony' and 'tv'")
-                    logger.info("\t <b><h3> Landing Page - Second product in List contain word 'sony' and 'tv' : %s </h3></b>" % html_pass, html=True)
-                    prod_image = self.commonobj.custom_element(self.objSuite.itemimg, element_name="multi_css")
-                    prod_image[1].click()
 
-        except AssertionError as error:
-            self.robot_env.log_to_console("Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv'" + str(error))
-            logger.info("\t <b><h3>Assersion Error : Landing Page - Second Product name does not contain text 'Sony' or 'tv' : %s </h3></b>" % html_fail, html=True)
-            self.commonobj.get_screenshot(self.commonobj.driver, "Product_Search_Failure")
-            raise Exception("Exception validate select product")
+        result_elem = self.commonobj.custom_driver_wait(self.objSuite.result_kw)
+        if result_elem:
+            itemlist = self.commonobj.custom_element(self.objSuite.itemtitle , element_name="multi_css")
+            if 'SONY' and 'tv' in itemlist[1].text.lower():
+                self.robot_env.log_to_console("Landing Page - Second product in List contain word 'sony' and 'tv'")
+                prod_image = self.commonobj.custom_element(self.objSuite.itemimg, element_name="multi_css")
+                prod_image[1].click()
+                return True
+        else:
+            return False
+

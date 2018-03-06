@@ -26,13 +26,13 @@ class BaseClass():
         """
         try:
             self.robot_env = BuiltIn()
-            if 'chrome' in driver:
-                self.driver = webdriver.Chrome("C:\\Python27\\chromedriver_win32\\chromedriver.exe")
-            else:
-                self.robot_env.log_to_console("Error while init Chrome driver")
+            assert 'chrome' in driver
+            self.driver = webdriver.Chrome("C:\\Python27\\chromedriver_win32\\chromedriver.exe")
+            assert 'chrome' in str(self.driver)
 
-        except Exception as e:
-            self.robot_env.log_to_console("Exception : Error loading Chrome Browser" , str(e))
+        except AssertionError as error:
+            self.robot_env.log_to_console("Assersion Error : Error loading Chrome Browser" , str(error))
+            logger.info("\t <b><h3>Assersion Error : ERROR LOADING BROWSER : %s </h3></b>" % html_fail, html=True)
 
 
     def custom_element(self, element, element_name=''):
@@ -55,7 +55,6 @@ class BaseClass():
         except Exception as e:
             self.robot_env.log_to_console("Element not found :" +  str(e))
             return False
-
 
     def custom_driver_wait(self, element, timeout=10):
         """
@@ -119,6 +118,7 @@ class BaseClass():
         :param element:
         :return:
         """
+
         try:
             if element:
                 element.text
